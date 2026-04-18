@@ -1,0 +1,67 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.output
+tmp
+*.tsbuildinfo
+
+# TanStack Start
+# routeTree.gen.ts is checked in so `typecheck` works without a prior build;
+# `vite dev`/`vite build` regenerates it on every run.
+.tanstack
+.vinxi
+.nitro
+
+# Next.js
+.next/
+next-env.d.ts
+!apps/*/next-env.d.ts
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Coverage & testing
+/coverage
+*.lcov
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+/.idea
+*.swp
+*.swo
+
+# VSCode (keep shared settings)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Nx
+.nx/cache
+.nx/workspace-data
+.nx/polygraph
+
+# Claude
+.claude/worktrees
+.claude/settings.local.json
+
+# OMC (session-local state; not part of the template)
+.omc/
+
+# Template init marker (not committed)
+.template-initialized

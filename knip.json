@@ -1,0 +1,21 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreFiles": ["sheriff.config.ts"],
+  "ignoreDependencies": ["tailwindcss", "@testing-library/react"],
+  "workspaces": {
+    ".": {
+      "ignoreDependencies": ["@vitest/coverage-v8", "vitest"]
+    },
+    "apps/tanstack-sample": {
+      "entry": ["src/router.tsx", "src/routes/**/*.tsx"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/next-sample": {
+      "entry": ["src/app/**/*.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/sample": {
+      "includeEntryExports": true
+    }
+  }
+}

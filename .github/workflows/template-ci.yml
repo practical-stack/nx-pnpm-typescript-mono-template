@@ -1,0 +1,48 @@
+name: Template CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  validate:
+    name: 'validate (${{ matrix.scenario }})'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [both-apps, tanstack-only, next-only]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Remove next-sample (tanstack-only scenario)
+        if: matrix.scenario == 'tanstack-only'
+        run: |
+          pnpm install --no-frozen-lockfile
+          node scripts/remove-app.mjs next-sample
+      - name: Remove tanstack-sample (next-only scenario)
+        if: matrix.scenario == 'next-only'
+        run: |
+          pnpm install --no-frozen-lockfile
+          node scripts/remove-app.mjs tanstack-sample
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Run checks
+        run: pnpm check
+      - name: Run tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build
