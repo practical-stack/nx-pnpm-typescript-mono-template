@@ -7,6 +7,7 @@ Lean Nx + pnpm + TypeScript monorepo with a TanStack Start app and a Next.js 16 
 ```bash
 git clone <this-repo> my-monorepo
 cd my-monorepo
+node scripts/init.mjs                     # removes template-only docs/
 pnpm install
 pnpm check
 pnpm --filter @repo/tanstack-sample dev   # port 3001
@@ -37,7 +38,9 @@ apps/
 packages/
   sample/            # shared library, source-level export
 scripts/
-  remove-app.mjs     # removes an app + prunes all references
+  init.mjs           # one-shot: deletes template-only docs/
+  remove-app.mjs     # removes an app + prunes all references (accepts `all`)
+  remove-all.mjs     # wipes every app + package, resets configs to a bare shell
 ```
 
 ## Customizing scope / package name
@@ -63,6 +66,8 @@ Pick one (or both) and drop the other:
 ```bash
 node scripts/remove-app.mjs tanstack-sample    # keep only Next.js
 node scripts/remove-app.mjs next-sample        # keep only TanStack Start
+node scripts/remove-app.mjs all                # drop both apps (keep packages/sample)
+node scripts/remove-all.mjs                    # also wipe packages/* (bare monorepo shell)
 pnpm install
 pnpm check
 ```

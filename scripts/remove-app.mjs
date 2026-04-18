@@ -8,6 +8,7 @@
 //   Updates knip.json
 //   Cleans catalog entries in pnpm-workspace.yaml that no other app uses
 // Usage: node scripts/remove-app.mjs <app-name>
+//        node scripts/remove-app.mjs all          # removes every app under apps/
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
@@ -37,24 +38,33 @@ const NEXT_ONLY_CATALOG = ['next', '@types/node']
 function main() {
   const appName = process.argv[2]
   if (!appName) {
-    console.error('Usage: node scripts/remove-app.mjs <app-name>')
+    console.error('Usage: node scripts/remove-app.mjs <app-name|all>')
     process.exit(1)
   }
 
-  const appDir = path.join(ROOT, 'apps', appName)
-  if (!fs.existsSync(appDir)) {
-    console.error(`App "${appName}" not found at ${appDir}`)
-    process.exit(1)
+  const targets = appName === 'all' ? listRemainingApps() : [appName]
+  if (targets.length === 0) {
+    console.log('No apps to remove.')
+    return
   }
 
-  console.log(`Removing apps/${appName}/ ...`)
-  fs.rmSync(appDir, { recursive: true, force: true })
+  for (const name of targets) {
+    const appDir = path.join(ROOT, 'apps', name)
+    if (!fs.existsSync(appDir)) {
+      console.error(`App "${name}" not found at ${appDir}`)
+      process.exit(1)
+    }
 
-  updateTsconfig(appName)
-  updateVitestWorkspace(appName)
-  updateSheriff(appName)
-  updateKnip(appName)
-  pruneCatalog(appName)
+    console.log(`Removing apps/${name}/ ...`)
+    fs.rmSync(appDir, { recursive: true, force: true })
+
+    updateTsconfig(name)
+    updateVitestWorkspace(name)
+    updateSheriff(name)
+    updateKnip(name)
+    pruneCatalog(name)
+  }
+
   runFormatter()
 
   console.log('\nDone. Next steps:')
