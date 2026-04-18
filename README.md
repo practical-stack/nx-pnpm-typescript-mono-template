@@ -90,9 +90,9 @@ pnpm build             # nx run-many -t build
 pnpm dev               # nx run-many -t dev
 ```
 
-## Releasing
+## How this template is wired
 
-See [docs/release.md](docs/release.md) for how to opt into `nx release`.
+See [docs/](docs/README.md) for the setup guide — pnpm workspace, TypeScript module resolution, Live Types, and the Nx + tsconfig references story.
 
 ## License
 
